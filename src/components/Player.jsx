@@ -1,22 +1,25 @@
 import { useState } from "react";
 
-function player({ initialName, symbol, isActive }) {
-  const [editing, setIsEditing] = useState(false);
+function player({ initialName, symbol, isActive, onChangeName }) {
   const [playerName, setPlayerName] = useState(initialName);
+  const [isEditing, setIsEditing] = useState(false);
 
   function handleClick() {
     setIsEditing((check) => !check);
+
+    if (isEditing) {
+      onChangeName(symbol, playerName);
+    }
   }
   function handleChange(event) {
-    console.log(event);
     setPlayerName(event.target.value);
     //
   }
   return (
     <li className={isActive ? "active" : undefined}>
       <span className="player">
-        {!editing && <span className="player-name">{playerName}</span>}
-        {editing && (
+        {!isEditing && <span className="player-name">{playerName}</span>}
+        {isEditing && (
           <input
             type="text"
             required
@@ -26,7 +29,7 @@ function player({ initialName, symbol, isActive }) {
         )}
         <span className="playe-symbol">{symbol}</span>
       </span>
-      <button onClick={handleClick}>{!editing ? "Edit" : "Save"}</button>
+      <button onClick={handleClick}>{!isEditing ? "Edit" : "Save"}</button>
     </li>
   );
 }
